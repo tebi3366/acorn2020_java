@@ -5,12 +5,19 @@ import java.util.Set;
 
 import test.mypac.Car;
 /*
- *   HashSet 은  Set 인터페이스를 구현한 클래스 이다.
- *   
- *   - 순서가 없다.
- *   - key 값도 없다.
- *   - 중복을 허용하지 않는다.
- *   - 어떤 data 를 묶음(집합) 으로 관리하고자 할때 사용한다.
+ *  ArrayList   0 1 2 3 4 ....
+ *  
+ *  HashMap key:value, key:value ....
+ *  
+ *  HashSet   (data1 data3 data2) 여러개의 데이터가 묶여있음 
+ *  							    순서없고 키값도 없다 갯수는 알수있음
+ * 
+ *  HashSet 은 Set 인터페이스를 구현한 클래스 이다.
+ *  
+ *  - 순서가 없다.
+ *  - key 값도 없다.
+ *  - 중복을 허용하지 않는다.
+ *  - 어떤 data 를 묶음(집합) 으로 관리하고자 할때 사용한다.
  */
 public class MainClass12 {
 	public static void main(String[] args) {

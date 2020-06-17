@@ -19,7 +19,3 @@ public class MainClass01 {
 		r.down();
 	}
 }
-
-
-
-

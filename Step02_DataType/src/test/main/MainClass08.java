@@ -12,7 +12,3 @@ public class MainClass08 {
 		String result=str.toUpperCase();
 	}
 }
-
-
-
-
