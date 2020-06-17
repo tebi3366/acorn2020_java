@@ -53,9 +53,10 @@ public class ServerMain {
 				InputStreamReader isr=new InputStreamReader(is);
 				BufferedReader br=new BufferedReader(isr);
 				while(true) {
-					//클라이언트가 전송한 문자열 한줄 읽어들이기 
-					//클라이언트의 접속이 끈기면 Exception 이 발생하면서 
-					//catch 블럭으로 실행순서가 이동하면서 이 스레드는 종료 된다. 
+					/*
+					 *  클라이언트가 문자열을 한줄(개행기호와 함께) 보내면
+					 *  readLine() 메소드가 리턴 하면서 보낸 문자열을 가지고 온다.
+					 */
 					String msg=br.readLine();
 					System.out.println("메세지:"+msg);
 					if(msg==null) {
