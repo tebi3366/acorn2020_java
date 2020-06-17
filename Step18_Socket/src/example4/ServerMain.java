@@ -58,6 +58,9 @@ public class ServerMain {
 					//catch 블럭으로 실행순서가 이동하면서 이 스레드는 종료 된다. 
 					String msg=br.readLine();
 					System.out.println("메세지:"+msg);
+					if(msg==null) {
+						break;
+					}
 				}
 			}catch(Exception e) {
 				e.printStackTrace();
