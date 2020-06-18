@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class MyFrame extends JFrame{
 	
@@ -40,5 +41,3 @@ public class MyFrame extends JFrame{
 		new MyFrame("나의 프레임");
 	}
 }
-	
-

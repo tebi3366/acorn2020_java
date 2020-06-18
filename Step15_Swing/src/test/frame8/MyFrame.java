@@ -24,7 +24,6 @@ public class MyFrame extends JFrame implements ActionListener{
 		sendBtn.addActionListener(this);
 		add(sendBtn);
 	}
-	
 	public static void main(String[] args) {
 		//MyFrame 클래스를 이용해서 객체 생성하고 참조값을 지역변수 frame 에 담기 
 		MyFrame frame=new MyFrame();
@@ -40,6 +39,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		//JTextField 에 입력한 문자열을 읽어와야한다.
 		String msg=inputMsg.getText();
+		
 		
 		JOptionPane.showMessageDialog(this, msg);
 	}
