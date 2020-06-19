@@ -13,6 +13,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 public class ServerMain {
 	//static 필드
 	static List<ServerThread> threadList=new ArrayList<>();
@@ -97,7 +99,20 @@ public class ServerMain {
 					 *  실행순서가 try 블럭을 벗어나면 run() 메소드가 리턴하게 되고
 					 *  run() 메소드가 리턴되면 해당 스레드는 종료가 된다. 
 					 */
+					//클라이언트가 전송하는 문자열을 읽어낸다
 					String msg=br.readLine();
+					//전송된 JSON 문자열을 사용할 준비를 한다.
+					JSONObject jsonObj=new JSONObject(msg);
+					//type 을 읽어낸다
+					String type=jsonObj.getString("type");
+					if(type.equals("enter")) {
+						//현재 스레드가 대응하는 클라이언트의 대화명을 필드에 저장한다.\
+						String chatName=jsonObj.getString("name");
+						this.chatName=chatName;
+					}else if(type.equals("msg")){
+						
+					}
+					
 					System.out.println("메세지:"+msg);
 					//클라이언트에게 동일한 메세지를 보내는 메소드를 호출한다.
 					sendMessage(msg);

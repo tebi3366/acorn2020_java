@@ -52,13 +52,11 @@ import org.json.JSONObject;
  *  {"name":"Kim", "friends":["김구라","해골","원숭이"]}
  */
 
-
-
 /*
  * 	메세지의 종류
  * 
  * 	1. 일반 대화메세지
- * 	 {"name":"김구라","msg":"안녕하세요"}
+ * 	 {"type":"msg","name":"김구라","content":"안녕하세요"}
  * 	
  * 	2. 누군가 입장 했다는 메세지
  *   {"enter":"김구라"}
@@ -96,20 +94,20 @@ public class ClientMain extends JFrame
 			OutputStream os=socket.getOutputStream();
 			OutputStreamWriter osw=new OutputStreamWriter(os);
 			bw=new BufferedWriter(osw);
-			//내가 입장한다고 서버에 메세지를 보낸다.
-			//"{"enter":"김구라"}"
-			//String msg="{\"enter\":}""+chatName+"\"}";
+			//서버로 부터 메세지를 받을 스레드도 시작을 시킨다.
+			new ClientThread().start();
 			
+			//내가 입장한다고 서버에 메세지를 보낸다.
+			//"{"type":"enter","name":"대화명"}"
 			JSONObject jsonObj=new JSONObject();
 			jsonObj.put("enter", chatName);
+			jsonObj.put("name", chatName);
 			String msg=jsonObj.toString();
 			//BufferedWriter 객체를 이용해서 보내기
 			bw.write(msg);
 			bw.newLine();
-			
-			//서버로 부터 메세지를 받을 스레드도 시작을 시킨다.
-			new ClientThread().start();
-		}catch(Exception e) {
+			bw.flush();
+		}catch(Exception e) {//접속이 실패하면 예외가 발생한다.
 			e.printStackTrace();
 		}
 		
@@ -173,8 +171,16 @@ public class ClientMain extends JFrame
 		//전송할 문자열
 				String msg=tf_msg.getText();
 				try {
+					//JSONObject 객체를 생성해서 정보를 구성하고
+					JSONObject jsonObj=new JSONObject();
+					jsonObj.put("type", "msg");
+					jsonObj.put("name", chatName);
+					jsonObj.put("content", msg);
+					//Json 문자열을 얻어낸다.
+					String json=jsonObj.toString();
+					
 					//필드에 있는 BufferedWritr 객체의 참조값을 이용해서 서버에 문자열 출력하기
-					bw.write(chatName+" : "+msg);
+					bw.write(json);
 					bw.newLine();//개행기호도 출력 (서버에서 줄단위로 읽어낼 예정)
 					bw.flush();
 				}catch(Exception e2) {
@@ -194,8 +200,24 @@ public class ClientMain extends JFrame
 				InputStreamReader isr=new InputStreamReader(is);
 				BufferedReader br=new BufferedReader(isr);
 				while(true){
-					//서버로부터 문자열ㅇ 전송되는지 대기한다.
+					//서버로부터 문자열이 전송되는지 대기한다.
 					String msg=br.readLine();
+					JSONObject jsonObj=new JSONObject(msg);
+					String type=jsonObj.getString("type");
+					if(type.equals("enter")) {//입장메세지라면
+						//누가 입장햇는지 읽어낸다.
+						String name=jsonObj.getString("name");
+						area.append("["+name+"] 님이 입장했습니다.");
+						area.append("\r\n");
+					}else if(type.equals("msg")) {//대화메세지 라면
+						//누가
+						String name=jsonObj.getString("name");
+						//어떤내용을
+						String content=jsonObj.getString("content");
+						//출력하기
+						area.append(name+" : "+content);
+						area.append("\r\n");
+					}
 					//JTextArea 에 출력하기
 					area.append(msg);
 					area.append("\r\n"); //개행 기호로 출력하기
