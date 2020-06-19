@@ -227,6 +227,12 @@ public class ClientMain extends JFrame
 					//출력하기
 					area.append(name+" : "+content);
 					area.append("\r\n");
+				}else if(type.equals("out")) {
+					//누가
+					String name=jsonObj.getString("name");
+					//출력하기
+					area.append("[[ "+name+" ]] 님이 퇴장했습니다.");
+					area.append("\r\n");
 				}
 			}catch(JSONException je) {
 				je.printStackTrace();
