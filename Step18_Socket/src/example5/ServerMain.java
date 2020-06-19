@@ -49,6 +49,8 @@ public class ServerMain {
 		Socket socket;
 		//클라이언트에게 출력할수 문자열을 있는 객체
 		BufferedWriter bw;
+		//클라이언트의 대화명을 저장할 필드
+		String chatName;
 		
 		//생성자의 인자로 Socket 객체를 전달받도록 한다.
 		public ServerThread(Socket socket) {
