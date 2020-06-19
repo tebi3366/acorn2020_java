@@ -1,6 +1,8 @@
 package example5;
 
 import java.awt.BorderLayout;
+
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +26,34 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.json.JSONObject;
+/*
+ *  JSON
+ *  
+ *  - Java Script Object Notation (자바스크립트 객체 표기법을 따르는 문자열)
+ *  
+ *  - 데이터의 type
+ *  1.{ }
+ *  2.[ ]
+ * 	3. "xxx"
+ *  4. 10  or 10.1
+ *  5. true or false
+ *  6. null
+ *  
+ *  - JSON 예제
+ *  
+ *  {"num":1 , "name":"김구라" , "isMan":true , "Phone" : null}
+ *  
+ *  [10, 20, 30, 40, 50]
+ *  
+ *  ["김구라","해골","원숭이"]
+ *  
+ *  [{},{},{}]
+ *  
+ *  {"name":"Kim", "friends":["김구라","해골","원숭이"]}
+ */
+
+
+
 /*
  * 	메세지의 종류
  * 
