@@ -18,7 +18,6 @@ public class ServerMain {
 	static List<ServerThread> threadList=new ArrayList<>();
 	
 	public static void main(String[] args) {
-		
 		//필요한 객체를 저장할 지역변수 미리 만들기 
 		ServerSocket serverSocket=null;
 		try {
