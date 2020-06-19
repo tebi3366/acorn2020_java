@@ -13,9 +13,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -141,6 +143,20 @@ public class ClientMain extends JFrame
 		
 		//엔터키로 메세지 전송 가능하게 하기 위해
 		tf_msg.addKeyListener(this);
+		
+		//Vector 는 ArrayList 와 같다고 생각하고 사용하면 된다.
+		//추가기능(스레드동기화)가 있어서 조금더 무겁다
+		Vector<String> vec=new Vector<>();
+		vec.add("김구라");
+		vec.add("해골");
+		vec.add("원숭이");
+		
+		JList<String> jList=new JList<String>(vec);
+		jList.setBackground(Color.green);
+		
+		JPanel leftPanel=new JPanel();
+		leftPanel.add(jList);
+		add(leftPanel, BorderLayout.EAST);
 		
 	}//생성자 
 	
