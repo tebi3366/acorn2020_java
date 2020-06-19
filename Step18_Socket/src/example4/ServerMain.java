@@ -108,10 +108,6 @@ public class ServerMain {
 			}finally {
 				//접속이 끈겨서 종료 되는 스레드는 List에서 제거한다.
 				threadList.remove(this);
-<<<<<<< HEAD
-=======
-				
->>>>>>> refs/remotes/upstream/master
 				try {
 					if(socket!=null)socket.close();
 				}catch(Exception e) {}
