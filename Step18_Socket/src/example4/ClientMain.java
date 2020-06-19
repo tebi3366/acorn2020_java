@@ -97,8 +97,77 @@ public class ClientMain extends JFrame
 	}
 
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		sendMessage();
+	}
+	
+	//메세지 전송하는 메소드
+	public void sendMessage() {
+		//전송할 문자열
+				String msg=tf_msg.getText();
+				try {
+					//필드에 있는 BufferedWritr 객체의 참조값을 이용해서 서버에 문자열 출력하기
+					bw.write(msg);
+					bw.newLine();//개행기호도 출력 (서버에서 줄단위로 읽어낼 예정)
+					bw.flush();
+				}catch(Exception e2) {
+					e2.printStackTrace();
+				}
+				tf_msg.setText("");
+	}
+
+	//서버에서 불특정 시점에 도착하는 메시지를 받을 스레드
+	public class ClientThread extends Thread{
+		
+		@Override
+		public void run() {
+			try {
+				//서버로 부터 입력 받을수 있는 객체의 참조값 얻어오기
+				InputStream is=socket.getInputStream();
+				InputStreamReader isr=new InputStreamReader(is);
+				BufferedReader br=new BufferedReader(isr);
+				while(true){
+					//서버로부터 문자열ㅇ 전송되는지 대기한다.
+					String msg=br.readLine();
+					//JTextArea 에 출력하기
+					area.append(msg);
+					area.append("\r\n"); //개행 기호로 출력하기
+					//최근 추가된 글 내용이 보일수 있도록
+					int docLength=area.getDocument().getLength();
+					area.setCaretPosition(docLength);
+					if(msg==null) {
+						break;
+					}
+				}
+			} catch (IOException e) {
+				
+			}
+		}
+	}
+	@Override
+	public void keyPressed(KeyEvent e) {
+		//눌러진 키의 코드값
+		int code=e.getKeyCode();
+		if(code == KeyEvent.VK_ENTER) {//만일 엔터키를눌렀다면
+			sendMessage();
+		}
+	}
 
 
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+}
 
 
 
