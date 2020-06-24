@@ -1,20 +1,15 @@
 package test.dto;
 
-import java.sql.Date;
-
 public class MemoDto {
-	//회원 한명의 정보를 담을 필드 선언
 	private int num;
 	private String content;
-	private Date date;
-	//default 생성자 만들기
+	private String regdate;
 	public MemoDto() {}
-	//인자로 필드에 저장할 값을 전달 받는 생성자
-	public MemoDto(int num, String content, Date date) {
+	public MemoDto(int num, String content, String regdate) {
 		super();
 		this.num = num;
 		this.content = content;
-		this.date = date;
+		this.regdate = regdate;
 	}
 	public int getNum() {
 		return num;
@@ -28,15 +23,11 @@ public class MemoDto {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getDate() {
-		return date;
+	public String getRegdate() {
+		return regdate;
 	}
-	public void setRegdate(Date date) {
-		this.date = date;
-	}
-	public void setRegdate(String string) {
-		// TODO Auto-generated method stub
-		
+	public void setRegdate(String regdate) {
+		this.regdate = regdate;
 	}
 	
 }

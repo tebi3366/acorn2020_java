@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.Date;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -18,42 +17,22 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-
 import test.dao.MemoDao;
 import test.dto.MemoDto;
 
-/*	CREATE TABLE MEMO(
- *	num NUMBER PRIMARY KEY,
- *	content VARCHAR2(30),
- *	regdate DATE);
- *
- *	CREATE SEQUENCE MEMO_SEQ;
- * 	
- * 	위와 같이 테이블과 시퀀스를 만들고 해당 테이블에 데이터를
- * 	SELECT, INSERT,UPDATE,DELETE 기능을 수행할수 있는 MemoFrame 을 만들어보세요.
- * 
- * 	조건
- *  1. num 칼럼은 시퀀스를 이용해서 넣으세요.
- *  2. regdate 칼람(등록일)의 값은 SYSDATE 를 이용해서 넣으세요.
- *  3. 수정은 content 만 수정 가능하게 하세요.
- *  4. MemoDto, MemoDao 를 만들어서 프로그래밍 하세요.
- * 
- */
-public class MemoFrame extends 
-				JFrame implements ActionListener, PropertyChangeListener{
+public class MemoFrame extends JFrame 
+				implements ActionListener,PropertyChangeListener{
 	//필드
-	JTextField inputcontent;
-	JTable table;
+	JTextField inputContent, inputAddr;
 	DefaultTableModel model;
-	
+	JTable table;
 	
 	//생성자
 	public MemoFrame() {
 		setLayout(new BorderLayout());
 		
 		JLabel label1=new JLabel("내용");
-		inputcontent=new JTextField(10);
-		
+		inputContent=new JTextField(10);
 		
 		JButton saveBtn=new JButton("저장");
 		saveBtn.setActionCommand("save");
@@ -66,7 +45,7 @@ public class MemoFrame extends
 		
 		JPanel panel=new JPanel();
 		panel.add(label1);
-		panel.add(inputcontent);
+		panel.add(inputContent);
 		
 		panel.add(saveBtn);
 		panel.add(deleteBtn);
@@ -82,13 +61,12 @@ public class MemoFrame extends
 			//인자로 전달되는 행(row), 열(column) 수정 가능 여부를 리턴하는 메소드  
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				//만일 첫번째(0번째) 칼럼이면 수정이 불가 하도록 한다.
+				//만일 첫번째(0번째 or 2번째) 칼럼이면 수정이 불가 하도록 한다.
 				if(column==0 || column==2) {
 					return false;
 				}
 				return true;
 			}
-		
 		};
 		//모델을 테이블에 연결한다.
 		table.setModel(model);
@@ -105,56 +83,60 @@ public class MemoFrame extends
 	public void displayMember() {
 		//row  의 갯수를 강제로 0 으로 지정해서 삭제 한다. 
 		model.setRowCount(0);
-		//회원 목록을 얻어와서 
+		//메모 목록을 얻어와서 
 		MemoDao dao=MemoDao.getInstance();
 		List<MemoDto> list=dao.getList();
 		for(MemoDto tmp:list) {
-			//MemberDto 객체에 저장된 정보를 Object[] 객체에 순서대로 담는다.
-			Object[] row= {tmp.getNum(), tmp.getContent(), tmp.getDate()};
+			//MemoDto 객체에 저장된 정보를 Object[] 객체에 순서대로 담는다.
+			Object[] row= {tmp.getNum(), tmp.getContent(), tmp.getRegdate()};
 			model.addRow(row);
 		}
 	}
 	
+	
+	//main  메소드
 	public static void main(String[] args) {
 		MemoFrame f=new MemoFrame();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setBounds(100,100,800,500);
+		f.setBounds(100, 100, 800, 500);
 		f.setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//액션 command 읽어오기
 		String command=e.getActionCommand();
 		if(command.equals("save")) {
 			//입력한 문자열을 읽어와서
-			String content=inputcontent.getText();
-			
-			//MemverDto 객체담아서
+			String content=inputContent.getText();
+			//MemoDto 객체에 담아서
 			MemoDto dto=new MemoDto();
 			dto.setContent(content);
-			
-			//MemberDao 객체를 이용해서 DB 에 저장
+			//MemoDao 객체를 이용해서 DB 에 저장 
 			MemoDao dao=MemoDao.getInstance();
 			boolean isSuccess=dao.insert(dto);
 			if(isSuccess) {
-				JOptionPane.showMessageDialog(this, content+" 내용을 추가했습니다.");
+				JOptionPane.showMessageDialog(this, content+" 메모 추가 했습니다.");
 			}else {
-				JOptionPane.showMessageDialog(this, "추가 실패");
+				JOptionPane.showMessageDialog(this, "추가 실패!");
 			}
-			//테이블에 목록다시 출력하기
-			displayMember();	
+			//JTable 에 목록 다시 출력하기 
+			displayMember();
 		}else if(command.equals("delete")) {
+			//1. 선택된 row  인덱스를 읽어온다.
 			int selectedIndex=table.getSelectedRow();
-			if(selectedIndex==-1) {
-				return;
+			if(selectedIndex==-1) {//선택된 row 가 없다면 
+				return;//메소드를 여기서 끝내라(리턴해라)
 			}
 			
-			int selection=JOptionPane.showConfirmDialog(this, "선택된 row를 삭제?");
+			//실제 삭제 할것인지 확인을 한다
+			int selection=JOptionPane.showConfirmDialog(this, "선택된 row 를 삭제하겠습니까?");
 			if(selection != JOptionPane.YES_OPTION) {
 				return;
 			}
+			//2. 선택된 row 의 첫번째(0번째) 칼럼의 숫자를 읽어온다 (삭제할 메모의 번호)
 			int num=(int)model.getValueAt(selectedIndex, 0);
-			//3. MemberDao 객체를 이용해서 해당 회원의 정보를 삭제한다.
+			//3. MemoDao 객체를 이용해서 해당 회원의 정보를 삭제한다.
 			MemoDao dao=MemoDao.getInstance();
 			dao.delete(num);
 			//4. table 에 회원목록 다시 출력하기 
@@ -162,27 +144,26 @@ public class MemoFrame extends
 		}
 	}
 	//현재 테이블 cell을 수정중인지 여부를 저장할 필드 
-		boolean isEditing=false;
-		
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			System.out.println("property change!");
-			System.out.println(evt.getPropertyName());
-			if(evt.getPropertyName().equals("tableCellEditor")) {
-				if(isEditing) {//수정중일때 
-					//변화된 값을 읽어와서 DB 에 반영한다. 
-					//수정된 칼럼에 있는 row  전체의 값을 읽어온다. 
-					int selectedIndex=table.getSelectedRow();
-					int num=(int)model.getValueAt(selectedIndex, 0);
-					String content=(String)model.getValueAt(selectedIndex, 1);
-					Date date=(Date)model.getValueAt(selectedIndex, 2);
-					//수정할 회원의 정보를 MemberDto 객체에 담고 
-					MemoDto dto=new MemoDto(num, content , date);
-					//DB에 저장하기 
-					MemoDao.getInstance().update(dto);
-					isEditing=false;//수정중이 아니라고 표시한다.
-				}
-				isEditing=true;//수정중이라 표시한다.
+	boolean isEditing=false;
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		System.out.println("property change!");
+		System.out.println(evt.getPropertyName());
+		if(evt.getPropertyName().equals("tableCellEditor")) {
+			if(isEditing) {//수정중일때 
+				//변화된 값을 읽어와서 DB 에 반영한다. 
+				//수정된 칼럼에 있는 row  전체의 값을 읽어온다. 
+				int selectedIndex=table.getSelectedRow();
+				int num=(int)model.getValueAt(selectedIndex, 0);
+				String content=(String)model.getValueAt(selectedIndex, 1);
+				//수정할 회원의 정보를 MemoDto 객체에 담고 
+				MemoDto dto=new MemoDto(num, content, null);
+				//DB에 저장하기 
+				MemoDao.getInstance().update(dto);
+				isEditing=false;//수정중이 아니라고 표시한다.
 			}
+			isEditing=true;//수정중이라 표시한다.
 		}
+	}
 }
