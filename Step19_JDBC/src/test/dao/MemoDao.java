@@ -67,7 +67,7 @@ public class MemoDao {
 		}finally {
 			try {
 				//객체를 사용했던 순서 역순으로 닫아준다.
-				if(rs!=null)rs.close();
+				if(rs!=null)rs.close(); // 코드가 한줄이면 {  } 생략가능하다!
 				if(pstmt!=null)pstmt.close();
 				if(conn!=null)conn.close();
 			}catch(Exception e) {}

@@ -15,7 +15,8 @@ public class MemoDto {
 		return num;
 	}
 	public void setNum(int num) {
-		this.num = num;
+		this.num = num; //참조값을 this로 가리킨다 필드 혹은 메소드 ... 
+		//this.num은 필드를 가르키고있다.
 	}
 	public String getContent() {
 		return content;
