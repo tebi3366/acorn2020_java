@@ -30,7 +30,7 @@ public class MemoDao {
 		ResultSet rs=null;
 		try {
 			conn=new DBConnect().getConn();
-			String sql="SELECT num,content,regdate"
+			String sql="SELECT num,content,TO_CHAR(regdate,'YYYY\"년\"MM\"월\"DD\"일\" AM HH:MI') AS regdate"
 					+ " FROM memo"
 					+ " ORDER BY num ASC";
 			pstmt=conn.prepareStatement(sql);
