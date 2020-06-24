@@ -31,8 +31,12 @@ public class MemoDto {
 	public Date getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setRegdate(Date date) {
 		this.date = date;
+	}
+	public void setRegdate(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
